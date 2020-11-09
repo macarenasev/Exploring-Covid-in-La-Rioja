@@ -1,0 +1,30 @@
+table {
+  background-color: #ffffff;
+}
+
+  
+table thead th { 
+  color: white; 
+  font-size:10pt; 
+  background-color: #2b3e50;
+  
+}
+
+table tr td { 
+  color: black; 
+  font-size:10pt; 
+  background-color: #ffffff;
+  
+}
+
+table .dataTables_info{
+  color: white;
+}
+
+.container-fluid {
+    height: 100%;
+}
+
+.tab-content {
+    height: 100%;
+}
