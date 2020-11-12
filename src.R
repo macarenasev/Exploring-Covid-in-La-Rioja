@@ -6,15 +6,23 @@
 #' Download file from url. If download was succesfull overwrite existing file and updates changelog
 update.files <- function(files, opath = "./data/"){
   
-  if(file.exists(paste0(opath, "date_updated.csv.gz"))){
-    changelog = fread(paste0(opath, "date_updated.csv.gz"))
+  today <- Sys.Date()
+  if(file.exists(paste0(opath, "changelog.csv.gz"))){
+    changelog = fread(paste0(opath, "changelog.csv.gz"))
+    if (min(changelog$date_updated) == today){
+      print('Files are up to date')
+      return()
+    }else{
+      print('Downloading files up to date')
+    }
+    
   }else{
     changelog = data.table(file = character(), date_updated = character())
   }
 
   for(file in files){
     file_name = names(which(files == file))
-    today <- Sys.Date()
+    
     
     dt <- as.data.table(read.csv(file, sep = ","))
     if(ncol(dt) == 1)
@@ -25,19 +33,22 @@ update.files <- function(files, opath = "./data/"){
       ofile <- paste0(opath, file_name, ".csv.gz")
       fwrite(dt, ofile)
       
-      changelog[file == file_name, date_updated := today]
+      if(nrow(changelog[file == file_name]) == 0){
+        changelog = rbind(changelog, data.table(file = file_name, date_updated = as.character(today)))
+      }else{
+        changelog[file == file_name, date_updated := today]
+      }
     }
   }
   
   ofile <- paste0(opath, "changelog.csv.gz")
-  fwrite(dt, ofile)
+  fwrite(changelog, ofile)
 }
 
 
 load.file <- function(file, files, opath = "./data/", column.translator = column_names_translator){
   
   file_name = names(which(files == file))
-  print(file_name)
   
   if(file.exists(paste0(opath, file_name, ".csv.gz"))){
     eval(parse(text = paste0(file_name, "= fread('", opath, file_name, ".csv.gz')")), envir=.GlobalEnv)
