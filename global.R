@@ -2,6 +2,7 @@
 library(data.table)
 library(pdftools)
 library(R.utils)
+library(leaflet)
 source("./src.R")
 
 files = list(open_cases = "https://ias1.larioja.org/opendata/download?r=Y2Q9ODU1fGNmPTAz",
