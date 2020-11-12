@@ -17,7 +17,7 @@ ui <- shinyUI(fluidPage(
                                      column(9,
                                             fluidRow(
                                                 column(3, 
-                                                       h6("Open Cases")
+                                                       h6("Open Cases in La Rioja")
                                                 ),
                                                 column(3, 
                                                        h6("Open Cases in Logroño")
@@ -41,7 +41,8 @@ ui <- shinyUI(fluidPage(
                                  ),
 
                                  fluidRow(
-                                     plotlyOutput("IA", height=400, width=1100),
+                                   leafletOutput(outputId = "ByRegion")
+                                     # plotlyOutput("IA", height=400, width=1100),
                                   )
                         )
                ),
