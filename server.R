@@ -4,8 +4,8 @@ server <- shinyServer(function(input, output) {
     leaflet(tests_region) %>% 
       addTiles() %>% 
       setView(lat = 42.349395, lng = -2.500749, zoom = 9) %>% 
-      addCircles(data = tests_region, lat = ~ Lat, lng = ~ Lon, weight = 1, radius = ~5*Rate_Inc_14_Days, popup = ~as.character(City), 
-                 label = ~as.character(paste0(City, " - Cumulative Incidence Last 14 Days: ", sep = " ", Rate_Inc_14_Days)), 
+      addCircles(data = tests_region, lat = ~ Lat, lng = ~ Lon, weight = 1, radius = ~5*Cum_Inc_14_Days, popup = ~as.character(City), 
+                 label = ~as.character(paste0(City, " - Cumulative Incidence Last 14 Days: ", sep = " ", Cum_Inc_14_Days)), 
                  color = "darkred", fillOpacity = 0.3)
   })
   
@@ -33,6 +33,6 @@ server <- shinyServer(function(input, output) {
     sum(open_cases$Active_Cases)
   }))
   output$total_open_cases_in_logroño <- renderText(paste({
-    sum(open_cases[City_w_more_than_1000_people== "Logroño"]$Active_Cases)
+    sum(open_cases[City_w_more_than_1000_people== "LOGROÑO"]$Active_Cases)
   }))
 })
