@@ -23,10 +23,9 @@ update.files <- function(files, opath = "./data/"){
   for(file in files){
     file_name = names(which(files == file))
     
-    
-    dt <- as.data.table(read.csv(file, sep = ","))
+    dt <- as.data.table(read.csv(file, sep = ",", check.names = F))
     if(ncol(dt) == 1)
-      dt <- as.data.table(read.csv(file, sep = ";"))
+      dt <- as.data.table(read.csv(file, sep = ";", check.names = F))
     
     if(nrow(dt) > 1){
       
@@ -46,18 +45,24 @@ update.files <- function(files, opath = "./data/"){
 }
 
 
+#' Load file and convert it to data.table
+#' @param file Name of the file to load
+#' @param files List of available files
+#' @param opath Path were file is located
+#' Load file in Global Environment and convert it to data.table
 load.file <- function(file, files, opath = "./data/", column.translator = column_names_translator){
   
   file_name = names(which(files == file))
+  column_names = as.character(unlist(column.translator[names(column.translator) == file_name]))
   
   if(file.exists(paste0(opath, file_name, ".csv.gz"))){
-    eval(parse(text = paste0(file_name, "= fread('", opath, file_name, ".csv.gz')")), envir=.GlobalEnv)
-    eval(parse(text = paste0("names(", file_name, ") = names(column_names_translator)[unlist(lapply(names(", file_name,
-                             "), function(x){ grep(paste0('^', x, '$'), column_names_translator)}))]")), envir=.GlobalEnv)
+    eval(parse(text = paste0(file_name, "= fread('", opath, file_name, ".csv.gz', encoding = 'UTF-8')")), envir=.GlobalEnv)
+    eval(parse(text = paste0("setnames(", file_name, ", column_names)")))
+    eval(parse(text = paste0(file_name, " <- apply(", file_name, ", 2, toupper)")))
+    
   }else{
     eval(parse(text = paste0(file_name, "= data.table()")), envir=.GlobalEnv)
   }
-  
   
 }
 
