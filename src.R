@@ -53,18 +53,45 @@ update.files <- function(files, opath = "./data/"){
 load.file <- function(file, files, opath = "./data/", column.translator = column_names_translator){
   
   file_name = names(which(files == file))
-  column_names = as.character(unlist(column.translator[names(column.translator) == file_name]))
+  column_names <<- as.character(unlist(column.translator[names(column.translator) == file_name]))
   
   if(file.exists(paste0(opath, file_name, ".csv.gz"))){
     eval(parse(text = paste0(file_name, "= fread('", opath, file_name, ".csv.gz', encoding = 'UTF-8')")), envir=.GlobalEnv)
-    eval(parse(text = paste0("setnames(", file_name, ", column_names)")))
-    eval(parse(text = paste0(file_name, " <- apply(", file_name, ", 2, toupper)")))
+    eval(parse(text = paste0("setnames(", file_name, ", column_names)")), envir=.GlobalEnv)
+    eval(parse(text = paste0(file_name, " <- apply(", file_name, ", 2, toupper)")), envir=.GlobalEnv)
+    eval(parse(text = paste0(file_name, " <- as.data.table(", file_name, ")")), envir=.GlobalEnv)
+    eval(parse(text = paste0(file_name, " <- ", file_name, "[ , lapply(.SD, trim.leading)]")), envir=.GlobalEnv)
+    eval(parse(text = paste0(file_name, " <- ", file_name, "[ , lapply(.SD, trim.trailing)]")), envir=.GlobalEnv)
+    eval(parse(text = paste0(".cols <- setdiff(colnames(", file_name, "), 'Date')")), envir=.GlobalEnv)
+    eval(parse(text = paste0(file_name, " <- ", file_name, "[, (.cols) := lapply(.SD, convert.numeric.cols),  .SDcols = .cols]")), envir=.GlobalEnv)
+    
     
   }else{
     eval(parse(text = paste0(file_name, "= data.table()")), envir=.GlobalEnv)
   }
   
+  if("Date" %in% column_names){
+    eval(parse(text = paste0(file_name, "[, Date := as.Date(Date, format = '%d/%m/%Y')]")), envir=.GlobalEnv)
+  }
+
 }
 
+# Returns string without leading white space
+trim.leading <- function (x)  sub("^\\s+", "", x)
+
+# Returns string without trailing white space
+trim.trailing <- function (x) sub("\\s+$", "", x)
+
+
+convert.numeric.cols <- function(x){
+  is_numeric <- all(unlist(lapply(x, function(y){!grepl('^[^0-9]+$', y)})))
+  
+  if(is_numeric){
+    return(as.numeric(x))
+  }else{
+    return(x)
+  }
+}
+  
 
 
