@@ -30,8 +30,14 @@ server <- shinyServer(function(input, output) {
     
   })  
   output$total_open_cases <- renderText(paste({
-    sum(open_cases$Active_Cases)
+    sum(open_cases$Active_Cases, na.rm = T)
   }))
+  
+  output$cumulative_incidence_LR <- renderText(paste({
+    max_date = max(cumulative_incidence$Date)
+    round(cumulative_incidence[Date == max_date]$Cum_Inc_14_Days, digits = 2)
+  }))
+  
   output$total_open_cases_in_logroño <- renderText(paste({
     sum(open_cases[City_w_more_than_1000_people== "LOGROÑO"]$Active_Cases)
   }))
