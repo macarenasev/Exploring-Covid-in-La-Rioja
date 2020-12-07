@@ -20,7 +20,8 @@ ui <- shinyUI(fluidPage(
                                                        h6("Open Cases in La Rioja")
                                                 ),
                                                 column(3, 
-                                                       h6("Open Cases in Logroño")
+                                                       h6("Cumulative Incidence (14d) in La Rioja")
+                                                       # h6("Open Cases in Logroño")
                                                 ),
                                             ),
                                             
@@ -33,7 +34,8 @@ ui <- shinyUI(fluidPage(
                                                 ),
                                                 column(3, 
                                                        wellPanel (
-                                                           div(textOutput("total_open_cases_in_logroño"),style = "font-size:105%")
+                                                         div(textOutput("cumulative_incidence_LR"), style = "font-size:105%")
+                                                         # div(textOutput("total_open_cases_in_logroño"),style = "font-size:105%")
                                                        )
                                                 )
                                             )
