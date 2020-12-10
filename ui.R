@@ -16,12 +16,22 @@ ui <- shinyUI(fluidPage(
                                  fluidRow(
                                      column(9,
                                             fluidRow(
+                                              column(5,
+                                                     "Date updated:", textOutput("date_updated", inline = T),
+                                              )
+                                            ),
+                                            fluidRow(
                                                 column(3, 
                                                        h6("Open Cases in La Rioja")
                                                 ),
                                                 column(3, 
                                                        h6("Cumulative Incidence (14d) in La Rioja")
-                                                       # h6("Open Cases in Logroño")
+                                                ),
+                                                column(3, 
+                                                       htmlOutput("open_cases_in_city_selected_text")
+                                                ),
+                                                column(3, 
+                                                       htmlOutput("cum_inc_in_city_selected_text")
                                                 ),
                                             ),
                                             
@@ -35,8 +45,13 @@ ui <- shinyUI(fluidPage(
                                                 column(3, 
                                                        wellPanel (
                                                          div(textOutput("cumulative_incidence_LR"), style = "font-size:105%")
-                                                         # div(textOutput("total_open_cases_in_logroño"),style = "font-size:105%")
                                                        )
+                                                ),
+                                                column(3, 
+                                                       htmlOutput("panel_open_cases_in_city_selected")
+                                                ),
+                                                column(3, 
+                                                       htmlOutput("panel_cum_inc_in_city_selected")
                                                 )
                                             )
                                      ),
