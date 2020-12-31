@@ -73,6 +73,22 @@ ui <- shinyUI(fluidPage(
                
                tabPanel("Testing", 
                         
+                        fluidRow(
+                          column(5,
+                                 plotlyOutput("tests_per_age_range")
+                          ),
+                          column(6,
+                                 
+                          ),
+                        ),
+                        fluidRow(
+                          column(6,
+                                 
+                          ),
+                          column(4,
+                                 
+                          ),
+                        ),
                ),
                
                tabPanel("Developers", fluidPage(theme = shinytheme("superhero")),

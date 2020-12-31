@@ -9,6 +9,25 @@ server <- shinyServer(function(input, output) {
                  color = "darkred", fillOpacity = 0.3)
   })
   
+  output$tests_per_age_range <- renderPlotly({
+    tests_age_range_plot = tests_age_range[Age_Range != "DESCONOCIDO"]
+    tests_age_range_plot[, Perc_Positive := PCR_Pos_Last_14_Days*100/(PCR_Last_14_Days)]
+    tests_age_range_plot[, Perc_Negative := PCR_Neg_Last_14_Days*100/(PCR_Last_14_Days)]
+    
+    plot <- ggplot(data=tests_age_range_plot, aes(x=Age_Range, y=Perc_Negative, fill='Percentage Negative')) +
+      geom_bar(stat="identity") +
+      geom_bar(aes(x=Age_Range, y=Perc_Positive, fill='Percentage Positive'), stat = "identity")+
+      scale_fill_brewer(palette = "Pastel2")+
+      theme_void()+
+      theme(legend.title=element_blank(), legend.position="none")
+    
+    ggplotly(plot) %>% 
+      layout(plot_bgcolor='transparent', paper_bgcolor='#a6b3bf',
+             font = list(color = '#737373'),
+             margin = list(l = 0, r = 30, b = 0, t = 30, pad = 0))
+    
+  })
+  
   output$IA <- renderPlotly({
 
     plot_cumulative_indidence <- cumulative_incidence %>% 
