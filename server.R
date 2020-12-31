@@ -13,8 +13,14 @@ server <- shinyServer(function(input, output) {
 
     plot_cumulative_indidence <- cumulative_incidence %>% 
       ggplot() + 
-      geom_bar(data = cumulative_incidence, aes(x= Date, y = New_Pos, color = "New Positives"), stat='identity', color = "lightgrey") +
-      geom_line(data = cumulative_incidence, aes(x = Date, y = CumInc_14Days, color = "Cumulative Incidence in the last 14 days"), color = "darkred") +
+      geom_bar(data = cumulative_incidence, aes(x= Date, y = New_Pos, color = "New Positives",
+                                                text = paste0("New Positives:", New_Pos)), stat='identity', color = "#a7b3be") +
+      geom_line(data = cumulative_incidence, aes(x = Date, y = Cum_Inc_14_Days, color = "Cumulative Incidence in the last 14 days",
+                                                 text = paste0("Cumulative Incidence 14 Days: ", Cum_Inc_14_Days), group = 1), color = "darkred") +
+      geom_line(data = cumulative_incidence, aes(x = Date, y = Cum_Inc_7_Days, color = "Cumulative Incidence in the last 7 days",
+                                                 text = paste0("Cumulative Incidence 7 Days: ", Cum_Inc_7_Days), group = 1), color = "#cc8800") +
+      geom_line(data = cumulative_incidence, aes(x = Date, y = 0, 
+                                                 text = paste0("Date: ", Date), group = 1), color = "black") +
       theme(legend.title=element_blank(), legend.position="top",
             plot.title = element_text(size=9),
             axis.title.x=element_blank(),
@@ -22,13 +28,26 @@ server <- shinyServer(function(input, output) {
             legend.key.size=unit(0.4, 'cm'),
             strip.text.x=element_text(size=7),
             axis.text=element_text(size=7),
-            axis.text.x=element_text(angle=45, hjust=1)) +
-      theme_bw() +
-      labs(y = "Cumulative Incidence in the last 14 days")
-    
-    ggplotly(plot_cumulative_indidence)
+            axis.text.x=element_text(angle=0, hjust=1),
+            plot.margin=unit(c(0, 0, 0, 0),"pt")) +
+      scale_x_date(date_breaks = "months" , date_labels = "%Y-%m") +
+      theme(
+        panel.background = element_rect(colour = "white")
+      )
+      
+    #'#f0f2f4'
+    ggplotly(plot_cumulative_indidence, tooltip = "text") %>% 
+      layout(plot_bgcolor='transparent', paper_bgcolor='#a6b3bf',
+             hoverlabel=list(bgcolor="white"),
+             hovermode = "x unified",
+             font = list(color = '#737373'),
+             margin = list(l = 0, r = 30, b = 0, t = 30, pad = 0),
+             yaxis = list(gridcolor = "#737373"),
+             xaxis = list(gridcolor = "#737373"))
     
   })  
+  
+  
   output$total_open_cases <- renderText(paste({
     sum(open_cases$Active_Cases, na.rm = T)
   }))

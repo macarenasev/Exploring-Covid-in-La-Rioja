@@ -14,7 +14,7 @@ ui <- shinyUI(fluidPage(
                         fillPage(theme = shinytheme("superhero"),
                                   
                                  fluidRow(
-                                     column(9,
+                                     column(10,
                                             fluidRow(
                                               column(5,
                                                      "Date updated:", textOutput("date_updated", inline = T),
@@ -59,11 +59,19 @@ ui <- shinyUI(fluidPage(
 
                                  fluidRow(
                                    leafletOutput(outputId = "ByRegion")
-                                     # plotlyOutput("IA", height=400, width=1100),
                                   )
                         )
                ),
-               tabPanel("PCR testing", 
+               
+               tabPanel("Evolution", 
+                        h5("Cumulative Incidence in the last 7 / 14 days"),
+                        fluidRow(
+                          plotlyOutput("IA")
+                          
+                        )   
+               ),
+               
+               tabPanel("Testing", 
                         
                ),
                

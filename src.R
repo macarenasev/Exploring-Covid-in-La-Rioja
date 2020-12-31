@@ -56,7 +56,8 @@ load.file <- function(file, files, opath = "./data/", column.translator = column
   column_names <<- as.character(unlist(column.translator[names(column.translator) == file_name]))
   
   if(file.exists(paste0(opath, file_name, ".csv.gz"))){
-    eval(parse(text = paste0(file_name, "= fread('", opath, file_name, ".csv.gz', encoding = 'UTF-8')")), envir=.GlobalEnv)
+    eval(parse(text = paste0(file_name, "= as.data.table(fread('", opath, file_name, ".csv.gz', encoding = 'UTF-8'))")), envir=.GlobalEnv)
+    eval(parse(text = paste0(file_name, "<- ", file_name, "[, colSums(is.na(", file_name, ")) != nrow(", file_name, "), with = F]")), envir=.GlobalEnv)
     eval(parse(text = paste0("setnames(", file_name, ", column_names)")), envir=.GlobalEnv)
     eval(parse(text = paste0(file_name, " <- apply(", file_name, ", 2, toupper)")), envir=.GlobalEnv)
     eval(parse(text = paste0(file_name, " <- as.data.table(", file_name, ")")), envir=.GlobalEnv)
