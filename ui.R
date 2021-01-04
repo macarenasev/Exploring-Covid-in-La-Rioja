@@ -74,11 +74,15 @@ ui <- shinyUI(fluidPage(
                tabPanel("Testing", 
                         
                         fluidRow(
-                          column(5,
+                          column(4,
+                                 h6("PCR tests in the last 14 days by Age Range"),
+                                 h6("(Positive in orange vs Total in green)"),
                                  plotlyOutput("tests_per_age_range")
                           ),
-                          column(6,
-                                 
+                          column(8,
+                                 h6("PCR test evolution in time"),
+                                 h6("Total Tests and Positive Ratio per day"),
+                                 plotlyOutput("test_evolution")
                           ),
                         ),
                         fluidRow(
