@@ -15,15 +15,23 @@ server <- shinyServer(function(input, output) {
     tests_age_range_plot[, `Percentage Positive` := round(PCR_Pos_Last_14_Days*100/(PCR_Total_w_Result), 2)]
     tests_age_range_plot[, `Percentage Negative` := round(PCR_Neg_Last_14_Days*100/(PCR_Total_w_Result), 2)]
     tests_age_range_plot[, `Total PCR in last 14 days` := PCR_Total_w_Result ]
-    tests_age_range_plot[, `Positive PCR in the last 14 days` :=PCR_Pos_Last_14_Days  ]
+    tests_age_range_plot[, `Positive PCR in last 14 days` :=PCR_Pos_Last_14_Days  ]
+    tests_age_range_plot[, Half_PCR_Pos_Last_14_Days :=PCR_Pos_Last_14_Days  ]
     
-    tests_age_range_plot = melt(tests_age_range_plot, measure.vars = c("Total PCR in last 14 days", "Positive PCR in the last 14 days"))
+    # tests_age_range_plot = melt(tests_age_range_plot, 
+    #                             measure.vars = c("Total PCR in last 14 days", "Positive PCR in the last 14 days"))
     
     
-    plot <- ggplot(data=tests_age_range_plot, aes(x=Age_Range, y=value, fill=variable, 
-                                                  text = paste0(value), group = 1)) +
-      geom_bar(stat="identity",position = "identity", alpha=.9)+
-      scale_fill_brewer(palette = "Pastel2")+
+    plot <- ggplot(data=tests_age_range_plot)+#, aes(x=Age_Range, y=value, fill=variable, 
+                                               #   text = paste0(value), group = 1)) +
+      geom_bar(aes(x=Age_Range, y=`Total PCR in last 14 days`, fill="Total PCR in last 14 days", 
+                   text = paste0("Total:", `Total PCR in last 14 days`), group = 1),
+               stat="identity",position = "identity", alpha=.9) +
+      geom_bar(aes(x=Age_Range, y=`Positive PCR in last 14 days`, fill="Positive PCR in last 14 days", 
+                   text = paste0("Positive:", `Positive PCR in last 14 days`, "\nPositive Ratio:", `Percentage Positive`, "%"), 
+                   group = 1), stat="identity",position = "identity", alpha=.9) +
+      #geom_bar(stat="identity",position = "identity", alpha=.9)+
+      scale_fill_manual(values = c("#fdcdac", "#b3e2cd"))+
       scale_x_discrete(labels = tests_age_range$Age_Range)+
       theme_void()+
       theme(legend.title=element_blank(), legend.position="none", 
@@ -36,7 +44,8 @@ server <- shinyServer(function(input, output) {
             strip.text.x=element_text(size=7),
             axis.text=element_text(size=7),
             axis.text.x=element_text(angle=0, hjust=1),
-            plot.margin=unit(c(0, 0, 0, 0),"pt"))+
+            plot.margin=unit(c(0, 0, 0, 0),"pt"),
+            text=element_text(angle=90, hjust=1))+
       coord_flip()
     
     ggplotly(plot, tooltip = c("text")) %>% 
