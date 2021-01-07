@@ -9,7 +9,7 @@ ui <- shinyUI(fluidPage(
     includeCSS("style.css"),
     
     navbarPage("Covid Status in La Rioja, Spain",
-               tabPanel("Overview",
+               tabPanel("Overview", 
                         
                         fillPage(theme = shinytheme("superhero"),
                                   
@@ -71,28 +71,32 @@ ui <- shinyUI(fluidPage(
                         )   
                ),
                
-               tabPanel("Testing", 
+               tabPanel("Testing", style="overflow-y: visible",
                         
-                        fluidRow(
-                          column(4,
-                                 h6("PCR tests in the last 14 days by Age Range"),
-                                 h6("(Positive in orange vs Total in green)"),
-                                 plotlyOutput("tests_per_age_range")
+                        fixedRow(
+                            column(4,
+                                   h6("PCR tests in the last 14 days by Age Range"),
+                                   h6("(Positive in orange vs Total in green)"),
+                                   plotlyOutput("tests_per_age_range", width = "auto", height = 280))
+                            ,
+                            column(8,
+                                   h6("PCR test evolution in time"),
+                                   h6("Total Tests and Positive Ratio per day"),
+                                   plotlyOutput("test_evolution", width = "auto", height = 280)
+                            ),
                           ),
-                          column(8,
-                                 h6("PCR test evolution in time"),
-                                 h6("Total Tests and Positive Ratio per day"),
-                                 plotlyOutput("test_evolution")
+                        fixedRow(
+                              column(8,
+                                     h6("PCR tests by City"),
+                                     h6("Top 15 Region with higher Cumulative PCR Positive Ratio"),
+                                     plotlyOutput("tests_region", width = "auto", height = 280)
+                              ),
+                              column(4,
+                                     h6("Total PCR tests by Weekday"),
+                                     h6("(Positive in orange vs Total in green)"),
+                                     plotlyOutput("tests_weekday", width = "auto", height = 280)
+                              ),
                           ),
-                        ),
-                        fluidRow(
-                          column(6,
-                                 
-                          ),
-                          column(4,
-                                 
-                          ),
-                        ),
                ),
                
                tabPanel("Developers", fluidPage(theme = shinytheme("superhero")),
