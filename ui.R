@@ -58,7 +58,8 @@ ui <- shinyUI(fluidPage(
                                  ),
 
                                  fluidRow(
-                                   leafletOutput(outputId = "ByRegion")
+                                   leafletOutput(outputId = "ByRegion"),
+                                   h6("Click in each city for extended information")
                                   )
                         )
                ),
@@ -99,9 +100,10 @@ ui <- shinyUI(fluidPage(
                           ),
                ),
                
-               tabPanel("Developers", fluidPage(theme = shinytheme("superhero")),
-                        p(a("Macarena", href="", target="_blank"),style = "font-size:25px"))
-               
+               tabPanel("About Me", fluidPage(theme = shinytheme("superhero")),
+                               h5(a("Check my Github account!", href="https://github.com/macarenasev", target="_blank"))
+                               
+               )   
     )
 ))
 
