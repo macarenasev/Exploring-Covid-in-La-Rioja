@@ -82,7 +82,7 @@ ui <- shinyUI(fluidPage(
                             ,
                             column(8,
                                    h6("PCR test evolution in time"),
-                                   h6("Total Tests and Positive Ratio per day"),
+                                   h6("Total and Positive Tests per day"),
                                    plotlyOutput("test_evolution", width = "auto", height = 280)
                             ),
                           ),
