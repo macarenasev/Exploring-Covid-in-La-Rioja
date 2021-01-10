@@ -9,7 +9,7 @@ of Spain. The data source in this repository is from the official [La
 Rioja Government iniciative ‘Open
 Data’](https://web.larioja.org/dato-abierto): a platform where a large
 quantity of datasets about several disciplines are available for
-everyone use.
+everyone to use.
 
 This application collects, standardizes, visualizes and synthesizes
 information about La Rioja’s COVID-19 status, cases evolution overtime
